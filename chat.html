@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calm Chat — Serene</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="ambient">
+  <div class="ambient-blob blob-1" style="background: var(--purple);"></div>
+  <div class="ambient-blob blob-2" style="background: var(--accent);"></div>
+</div>
+
+<nav>
+  <a class="nav-logo" href="index.html">ser<span>e</span>ne</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="breathing.html">Breathe</a></li>
+    <li><a href="games.html">Games</a></li>
+    <li><a href="chat.html" class="active">Chat</a></li>
+  </ul>
+</nav>
+
+<main class="page">
+  <div class="chat-layout">
+
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <h1>Calm Companion</h1>
+        <p>A gentle space to share what's on your mind</p>
+      </div>
+      <div class="chat-status">
+        <div class="status-dot"></div>
+        <span>Here with you</span>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+      <!-- Initial AI message -->
+      <div class="msg ai">
+        <div class="msg-avatar ai-av">✦</div>
+        <div class="msg-bubble">
+          Hello, and welcome. I'm glad you're here.<br/><br/>
+          This is a quiet, unhurried space. You can share what's on your mind, vent about your day, or simply talk — there's no agenda. What's present for you right now?
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-footer">
+      <div class="chat-suggestions" id="suggestions">
+        <button class="suggestion-chip">I'm feeling anxious</button>
+        <button class="suggestion-chip">Had a rough day</button>
+        <button class="suggestion-chip">Can't stop overthinking</button>
+        <button class="suggestion-chip">I just need to vent</button>
+        <button class="suggestion-chip">Help me calm down</button>
+      </div>
+      <div class="chat-input-row">
+        <textarea
+          class="chat-input"
+          id="chat-input"
+          placeholder="Share what's on your mind..."
+          rows="1"
+        ></textarea>
+        <button class="chat-send-btn" id="send-btn" title="Send">↑</button>
+      </div>
+      <div class="chat-disclaimer">
+        This AI companion offers gentle support, not clinical advice. If you're in crisis, please contact a professional or call a crisis line.
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+// ─── State ────────────────────────────────────────────────────────────────────
+const SYSTEM_PROMPT = `You are a calm, warm, deeply empathetic companion on a wellness app called Serene. Your role is to provide gentle emotional support, active listening, and grounding presence.
+
+Core principles:
+- Speak with warmth, softness, and patience. Never rush.
+- Validate feelings before offering any perspective or suggestion.
+- Use reflective listening: mirror back what you hear without parroting.
+- Never diagnose, prescribe, or give clinical advice.
+- Gently suggest professional help only if the person seems in serious distress.
+- Keep responses concise but meaningful — 2-4 short paragraphs at most.
+- Occasionally suggest a breathing exercise or grounding technique if fitting, but don't force it.
+- End most responses with a gentle, open question to keep the person talking.
+- Never use jargon or clinical language. Speak like a wise, caring friend.
+- If the person just wants to vent, let them. Don't problem-solve unless they ask.
+- Use calming language. Avoid alarming words. Create psychological safety.`;
+
+let conversationHistory = [];
+let isTyping = false;
+
+// ─── DOM ─────────────────────────────────────────────────────────────────────
+const messagesEl = document.getElementById('chat-messages');
+const inputEl    = document.getElementById('chat-input');
+const sendBtn    = document.getElementById('send-btn');
+const suggestions= document.getElementById('suggestions');
+
+// ─── Suggestion chips ─────────────────────────────────────────────────────────
+suggestions.querySelectorAll('.suggestion-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    inputEl.value = chip.textContent;
+    autoResize();
+    sendMessage();
+    suggestions.style.display = 'none';
+  });
+});
+
+// ─── Auto-resize textarea ─────────────────────────────────────────────────────
+function autoResize() {
+  inputEl.style.height = 'auto';
+  inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
+}
+inputEl.addEventListener('input', autoResize);
+
+inputEl.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+sendBtn.addEventListener('click', sendMessage);
+
+// ─── Add message to UI ────────────────────────────────────────────────────────
+function addMessage(role, text) {
+  const div = document.createElement('div');
+  div.className = `msg ${role}`;
+
+  const av = document.createElement('div');
+  av.className = `msg-avatar ${role === 'ai' ? 'ai-av' : 'user-av'}`;
+  av.textContent = role === 'ai' ? '✦' : 'you';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'msg-bubble';
+  bubble.innerHTML = text.replace(/\n/g, '<br/>');
+
+  div.appendChild(av);
+  div.appendChild(bubble);
+  messagesEl.appendChild(div);
+  scrollToBottom();
+  return bubble;
+}
+
+function showTyping() {
+  const div = document.createElement('div');
+  div.className = 'msg ai';
+  div.id = 'typing-indicator';
+
+  const av = document.createElement('div');
+  av.className = 'msg-avatar ai-av';
+  av.textContent = '✦';
+
+  const indicator = document.createElement('div');
+  indicator.className = 'typing-indicator';
+  indicator.innerHTML = `<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>`;
+
+  div.appendChild(av);
+  div.appendChild(indicator);
+  messagesEl.appendChild(div);
+  scrollToBottom();
+}
+
+function removeTyping() {
+  const t = document.getElementById('typing-indicator');
+  if (t) t.remove();
+}
+
+function scrollToBottom() {
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+}
+
+// ─── Send message ─────────────────────────────────────────────────────────────
+async function sendMessage() {
+  const text = inputEl.value.trim();
+  if (!text || isTyping) return;
+
+  // Hide suggestions after first message
+  suggestions.style.display = 'none';
+
+  // Add to UI + history
+  addMessage('user', text);
+  conversationHistory.push({ role: 'user', content: text });
+  inputEl.value = '';
+  inputEl.style.height = 'auto';
+
+  isTyping = true;
+  sendBtn.disabled = true;
+  showTyping();
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: conversationHistory,
+      }),
+    });
+
+    const data = await response.json();
+    const reply = data.content?.map(b => b.text || '').join('') || "I'm here with you. Can you tell me more?";
+
+    removeTyping();
+    addMessage('ai', reply);
+    conversationHistory.push({ role: 'assistant', content: reply });
+
+  } catch (err) {
+    removeTyping();
+    addMessage('ai', "I'm having a moment of quiet — could you try again? I'm here.");
+    console.error(err);
+  } finally {
+    isTyping = false;
+    sendBtn.disabled = false;
+    inputEl.focus();
+  }
+}
+</script>
+</body>
+</html>

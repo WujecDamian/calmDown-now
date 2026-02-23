@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Breathe — Serene</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="ambient">
+  <div class="ambient-blob blob-1"></div>
+  <div class="ambient-blob blob-2"></div>
+</div>
+
+<nav>
+  <a class="nav-logo" href="index.html">ser<span>e</span>ne</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="breathing.html" class="active">Breathe</a></li>
+    <li><a href="games.html">Games</a></li>
+    <li><a href="chat.html">Chat</a></li>
+  </ul>
+</nav>
+
+<main class="page">
+  <div class="breathe-heading">
+    <h1>Breathe</h1>
+    <p>Choose a technique, set your time, and let your body settle</p>
+  </div>
+
+  <div class="breathe-layout">
+    <!-- Technique Selector -->
+    <div class="technique-strip" id="technique-strip"></div>
+
+    <!-- Duration Selector -->
+    <div class="duration-strip">
+      <button class="dur-btn" data-minutes="2">2 min</button>
+      <button class="dur-btn active" data-minutes="5">5 min</button>
+      <button class="dur-btn" data-minutes="10">10 min</button>
+    </div>
+
+    <!-- Orb -->
+    <div class="orb-wrapper">
+      <div class="orb-ring ring-3"></div>
+      <div class="orb-ring ring-2"></div>
+      <div class="orb-ring ring-1"></div>
+      <div class="orb idle" id="orb">
+        <div class="orb-core"></div>
+      </div>
+      <div class="phase-info">
+        <div class="phase-label" id="phase-label">Ready</div>
+        <div class="phase-count" id="phase-count"></div>
+      </div>
+    </div>
+
+    <!-- Session Timer -->
+    <div class="session-timer" id="session-timer">5:00</div>
+
+    <!-- Controls -->
+    <div class="breathe-controls">
+      <button class="btn-breathe" id="btn-main">Begin</button>
+      <button class="btn-reset-b" id="btn-reset" style="display:none;" title="Reset">↺</button>
+    </div>
+
+    <!-- Description -->
+    <div class="technique-desc" id="technique-desc"></div>
+  </div>
+</main>
+
+<script src="breathing.js"></script>
+</body>
+</html>

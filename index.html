@@ -1,62 +1,88 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Breathe</title>
-    <link rel="stylesheet" href="./style/style.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@300;400;500&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <div class="bg-glow"></div>
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Serene — Your Calm Space</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
 
-    <div class="container">
-      <header>
-        <div class="logo">breathe</div>
-      </header>
+<div class="ambient">
+  <div class="ambient-blob blob-1"></div>
+  <div class="ambient-blob blob-2"></div>
+  <div class="ambient-blob blob-3"></div>
+</div>
 
-      <!-- Technique Selector -->
-      <div class="technique-strip" id="technique-strip"></div>
+<nav>
+  <a class="nav-logo" href="index.html">ser<span>e</span>ne</a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="breathing.html">Breathe</a></li>
+    <li><a href="games.html">Games</a></li>
+    <li><a href="chat.html">Chat</a></li>
+  </ul>
+</nav>
 
-      <!-- Duration Selector -->
-      <div class="duration-strip">
-        <button class="dur-btn" data-minutes="2">2 min</button>
-        <button class="dur-btn active" data-minutes="5">5 min</button>
-        <button class="dur-btn" data-minutes="10">10 min</button>
-      </div>
+<main class="page">
+  <section class="hero">
+    <p class="hero-eyebrow">Your calm space · Find your center</p>
+    <h1 class="hero-title">
+      Peace is<br/><em>always</em> accessible
+    </h1>
+    <p class="hero-sub">
+      A quiet corner of the internet designed to help you breathe, play, and reconnect with stillness.
+    </p>
 
-      <!-- Central Orb -->
-      <div class="orb-wrapper">
-        <div class="orb-ring ring-3"></div>
-        <div class="orb-ring ring-2"></div>
-        <div class="orb-ring ring-1"></div>
-        <div class="orb" id="orb">
-          <div class="orb-core"></div>
-        </div>
-        <div class="phase-info">
-          <div class="phase-label" id="phase-label">Ready</div>
-          <div class="phase-count" id="phase-count"></div>
-        </div>
-      </div>
-
-      <!-- Session Timer -->
-      <div class="session-timer" id="session-timer">5:00</div>
-
-      <!-- Start / Pause button -->
-      <div class="controls">
-        <button class="btn-main" id="btn-main">Begin</button>
-        <button class="btn-reset" id="btn-reset" style="display: none">
-          ↺
-        </button>
-      </div>
-
-      <!-- Technique description -->
-      <div class="technique-desc" id="technique-desc"></div>
+    <div class="hero-cards">
+      <a class="hero-card" href="breathing.html" data-color="blue">
+        <span class="hero-card-icon">🌊</span>
+        <div class="hero-card-title">Breathe</div>
+        <div class="hero-card-desc">Guided breathing techniques used by therapists, athletes, and the military to calm the nervous system.</div>
+        <div class="hero-card-arrow">Explore techniques →</div>
+      </a>
+      <a class="hero-card" href="games.html" data-color="green">
+        <span class="hero-card-icon">🌿</span>
+        <div class="hero-card-title">Play</div>
+        <div class="hero-card-desc">Gentle, mindful games that soothe rather than stimulate. No scores, no pressure — just presence.</div>
+        <div class="hero-card-arrow">Browse games →</div>
+      </a>
+      <a class="hero-card" href="chat.html" data-color="purple">
+        <span class="hero-card-icon">✦</span>
+        <div class="hero-card-title">Chat</div>
+        <div class="hero-card-desc">Talk to a calm AI companion. Share what's on your mind. No judgment, no rush, just a gentle ear.</div>
+        <div class="hero-card-arrow">Start a conversation →</div>
+      </a>
     </div>
+  </section>
 
-    <script src="./script/script.js"></script>
-  </body>
+  <div class="divider"></div>
+
+  <section class="home-section reveal">
+    <div class="eyebrow">Why it works</div>
+    <h2 class="home-section-title">Calm is a skill, not a state</h2>
+    <p class="home-section-sub">
+      The nervous system responds to deliberate, gentle input. Whether it's the rhythm of controlled breathing, the flow state of a quiet game, or simply putting feelings into words — each tool here is backed by science.
+    </p>
+    <a href="breathing.html" class="btn btn-primary" style="margin: 0 auto; display:inline-flex;">Start with breathing</a>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="home-section reveal">
+    <div class="eyebrow">A reminder</div>
+    <h2 class="home-section-title" style="font-style:italic; color: rgba(255,255,255,0.5);">You are allowed to rest.</h2>
+  </section>
+</main>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  reveals.forEach(r => io.observe(r));
+</script>
+</body>
 </html>
