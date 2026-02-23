@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Breathe</title>
+    <link rel="stylesheet" href="./style/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="bg-glow"></div>
+
+    <div class="container">
+      <header>
+        <div class="logo">breathe</div>
+      </header>
+
+      <!-- Technique Selector -->
+      <div class="technique-strip" id="technique-strip"></div>
+
+      <!-- Duration Selector -->
+      <div class="duration-strip">
+        <button class="dur-btn" data-minutes="2">2 min</button>
+        <button class="dur-btn active" data-minutes="5">5 min</button>
+        <button class="dur-btn" data-minutes="10">10 min</button>
+      </div>
+
+      <!-- Central Orb -->
+      <div class="orb-wrapper">
+        <div class="orb-ring ring-3"></div>
+        <div class="orb-ring ring-2"></div>
+        <div class="orb-ring ring-1"></div>
+        <div class="orb" id="orb">
+          <div class="orb-core"></div>
+        </div>
+        <div class="phase-info">
+          <div class="phase-label" id="phase-label">Ready</div>
+          <div class="phase-count" id="phase-count"></div>
+        </div>
+      </div>
+
+      <!-- Session Timer -->
+      <div class="session-timer" id="session-timer">5:00</div>
+
+      <!-- Start / Pause button -->
+      <div class="controls">
+        <button class="btn-main" id="btn-main">Begin</button>
+        <button class="btn-reset" id="btn-reset" style="display: none">
+          ↺
+        </button>
+      </div>
+
+      <!-- Technique description -->
+      <div class="technique-desc" id="technique-desc"></div>
+    </div>
+
+    <script src="./script/script.js"></script>
+  </body>
+</html>
